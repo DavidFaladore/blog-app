@@ -16,3 +16,6 @@ www/.env.php
 www/.env
 www/Homestead.yaml
 www/Homestead.json
+
+# Other
+.DS_Store
