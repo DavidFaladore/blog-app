@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Post;
+use App\CoverImage;
 
 class PostsController extends Controller
 {
@@ -25,11 +26,10 @@ class PostsController extends Controller
      */
     public function index()
     {
-        // $posts = Post::all();
-        // $posts = Post::where('title', 'Post Two')->get();
-        // $posts = Post::orderBy('title', 'desc')->get();
+        $cover_images = CoverImage::all();
         $posts = Post::orderBy('created_at', 'desc')->paginate(10);
-        return view('posts.index')->with('posts', $posts);
+        // return view('posts.index')->with('posts', $posts)->with('cover-images', $cover_images);
+        return view('posts.index', compact('posts', 'cover_images'));
     }
 
     /**
@@ -68,16 +68,26 @@ class PostsController extends Controller
             $fileNameToStore = $fileName.'_'.time().'.'.$fileExtension;
             // Upload the image
             $path = $request->file('cover_image')->storeAs('public/cover_images', $fileNameToStore);
+
+            // Create cover image
+            $coverImage = new CoverImage;
+            $coverImage->path = $fileNameToStore;
+            $coverImage->save();
         } else {
             $fileNameToStore = 'noimage.jpg';
         }
+
+        // Create cover image
+        $coverImage = new CoverImage;
+        $coverImage->path = $fileNameToStore;
+        $coverImage->save();
 
         // Create post
         $post = new Post;
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         $post->user_id = auth()->user()->id;
-        $post->cover_image = $fileNameToStore;
+        $post->cover_image_id = CoverImage::where('path', $fileNameToStore)->value('id');
         $post->save();
         
         return redirect('/posts')->with('success', 'Post Created');
@@ -91,8 +101,11 @@ class PostsController extends Controller
      */
     public function show($id)
     {
+        // $post = Post::find($id);
+        // return view('posts.show')->with('post', $post)
         $post = Post::find($id);
-        return view('posts.show')->with('post', $post);
+        $cover_image = CoverImage::find($post->cover_image_id);
+        return view('posts.show', compact('post', 'cover_image'));
     }
 
     /**
@@ -146,7 +159,7 @@ class PostsController extends Controller
         $post->title = $request->input('title');
         $post->body = $request->input('body');
         if($request->hasFile('cover_image')){
-            $post->cover_image = $fileNameToStore;
+            $post->cover_image_id = $fileNameToStore;
         }
         $post->save();
         
@@ -166,12 +179,6 @@ class PostsController extends Controller
         // Check for correct user
         if(auth()->user()->id != $post->user_id){
             return redirect('/posts')->with('error', 'Unathorized user to access this page');
-        }
-
-        // Check if not default image
-        if($post->cover_image != 'noimage.jpg'){
-            // Delete image
-            Storage::delete('public/cover_images/'.$post->cover_image);
         }
 
         $post->delete();

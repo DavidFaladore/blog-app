@@ -8,7 +8,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="/storage/cover_images/{{$post->cover_image}}" class="img-fluid" alt="">
+                            @foreach ($cover_images as $image)
+                                @if ($post->cover_image_id == $image->id)
+                                    <img src="/storage/cover_images/{{$image->path}}" class="img-fluid" alt="">
+                                @endif
+                            @endforeach
                         </div>
                         <div class="col-md-8">
                             <h3 class="card-title">{{$post->title}}</h3>

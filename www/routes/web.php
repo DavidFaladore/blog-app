@@ -14,6 +14,10 @@
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
 
+Route::get('/sitemap', function(){
+    return view('pages.sitemap');
+});
+
 Route::resource('posts', 'PostsController');
 Auth::routes();
 

@@ -15,6 +15,13 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    <style>
+        ul{ 
+            list-style: none;
+            padding-inline-start: 15px !important;
+        }
+    </style>
 </head>
 <body>
     <div id="app">

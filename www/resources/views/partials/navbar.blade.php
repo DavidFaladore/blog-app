@@ -10,14 +10,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
+                <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ request()->is('about') ? 'active' : '' }}">
                     <a class="nav-link" href="/about">About</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {{ request()->is('posts') ? 'active' : '' }}">
                     <a class="nav-link" href="/posts">Blog</a>
+                </li>
+                <li class="nav-item {{ request()->is('sitemap') ? 'active' : '' }}">
+                    <a class="nav-link" href="/sitemap">Sitemap</a>
                 </li>
             </ul>
 
@@ -25,16 +28,16 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Authentication Links -->
                 @guest
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->is('login') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                     </li>
                     @if (Route::has('register'))
-                        <li class="nav-item">
+                        <li class="nav-item {{ request()->is('register') ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
                 @else
-                    <li class="nav-item">
+                    <li class="nav-item {{ request()->is('posts/create') ? 'active' : '' }}">
                          <a class="nav-link" href="/posts/create">Create post</a>
                     </li>
                     <li class="nav-item dropdown">
@@ -43,7 +46,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/dashboard">
+                            <a class="dropdown-item {{ request()->is('dashboard') ? 'active' : '' }}" href="/dashboard">
                                 Dashboard
                             </a>
                             <a class="dropdown-item" href="{{ route('logout') }}"

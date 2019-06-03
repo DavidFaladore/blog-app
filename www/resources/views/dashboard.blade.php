@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Dashboard</div>
 
@@ -13,15 +13,14 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <a href="/posts/create" class="btn btn-primary mb-3">Create new post</a>
                     <h3>Your blog posts</h3>
                     @if (count($posts) > 0)
                         <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th></th>
-                                <th></th>
+                                <th style="width: 2%"></th>
+                                <th style="width: 2%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -44,7 +43,7 @@
                     @else
                      <p>You have no posts</p>
                     @endif
-                    
+                    <a href="/posts/create" class="btn btn-primary mt-3">Create new post</a>
                 </div>
             </div>
         </div>
